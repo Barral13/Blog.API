@@ -1,6 +1,9 @@
+using Blog.API.Data;
 var builder = WebApplication.CreateBuilder(args);
-var app = builder.Build();
 
-app.MapGet("/", () => "Hello World!");
+builder.Services.AddDbContext<BlogDataContext>();
+
+
+var app = builder.Build();
 
 app.Run();
