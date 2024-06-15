@@ -9,6 +9,6 @@ public class User
    public string Slug { get; set; } = string.Empty;
    public string Bio { get; set; } = string.Empty;
 
-   public IList<Post> Posts { get; set; }
-   public IList<Role> Roles { get; set; }
+   public IList<Post>? Posts { get; set; }
+   public IList<Role>? Roles { get; set; }
 }

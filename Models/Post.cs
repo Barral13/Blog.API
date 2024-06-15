@@ -8,8 +8,8 @@ public class Post
    public string Slug { get; set; } = string.Empty;
    public DateTime CreateDate { get; set; }
    public DateTime LastUpdateDate { get; }
-   public Category Category { get; set; }
-   public User Author { get; set; }
+   public Category Category { get; set; } = null!;
+   public User Author { get; set; } = null!;
 
-   public List<Tag> Tags { get; set; }
+   public List<Tag>? Tags { get; set; }
 }
