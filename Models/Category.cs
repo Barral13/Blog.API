@@ -7,4 +7,3 @@ public class Category
 
    public IList<Post>? Posts { get; set; }
 }
-
