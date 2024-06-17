@@ -8,7 +8,7 @@ namespace Blog.API.Controllers;
 [ApiController]
 public class CategoryController : ControllerBase
 {
-    // Get all categories
+    // Get all categories (READ ALL)
     [HttpGet("v1/categories")]
     public async Task<IActionResult> GetAsync(
         [FromServices] BlogDataContext context)
@@ -24,7 +24,7 @@ public class CategoryController : ControllerBase
         }
     }
 
-    // Get Category by Id
+    // Get Category by Id (READ)
     [HttpGet("v1/categories/{id:int}")]
     public async Task<IActionResult> GetByIdAsync(
         [FromRoute] int id,
@@ -47,7 +47,7 @@ public class CategoryController : ControllerBase
         }
     }
 
-    // Post category
+    // Post category (CREATE)
     [HttpPost("v1/categories")]
     public async Task<IActionResult> PostAsync(
         [FromBody] Category model,
@@ -58,11 +58,11 @@ public class CategoryController : ControllerBase
             await context.Categories.AddAsync(model);
             await context.SaveChangesAsync();
 
-            return Created($"vi/categories/{model.Id}", model);
+            return Created($"v1/categories/{model.Id}", model);
         }
         catch(DbUpdateException ex)
         {
-            return StatusCode(500, "05XE01 - Não foi possivel incluir a categoria");
+            return StatusCode(500, "05XE01 - NÃ£o foi possivel incluir a categoria");
         }
         catch (Exception ex) 
         {
@@ -70,7 +70,7 @@ public class CategoryController : ControllerBase
         }
     }
 
-    // Put category
+    // Put category (UPDADE)
     [HttpPut("v1/categories/{id:int}")]
     public async Task<IActionResult> PutAsync(
         [FromRoute] int id,
@@ -96,7 +96,7 @@ public class CategoryController : ControllerBase
         }
         catch (DbUpdateException ex)
         {
-            return StatusCode(500, "05XE03 - Não foi possivel alterar a categoria");
+            return StatusCode(500, "05XE03 - NÃ£o foi possivel alterar a categoria");
         }
         catch (Exception ex)
         {
@@ -104,7 +104,7 @@ public class CategoryController : ControllerBase
         }
     }
 
-    // Delete category
+    // Delete category (DELETE)
     [HttpDelete("v1/categories/{id:int}")]
     public async Task<IActionResult> DeleteAsync(
         [FromRoute] int id,
@@ -126,7 +126,7 @@ public class CategoryController : ControllerBase
         }
         catch (DbUpdateException ex)
         {
-            return StatusCode(500, "05XE05 - Não foi possivel remover a categoria");
+            return StatusCode(500, "05XE05 - NÃ£o foi possivel remover a categoria");
         }
         catch (Exception ex)
         {
