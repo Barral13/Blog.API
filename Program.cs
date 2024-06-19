@@ -27,7 +27,7 @@ builder
    .AddControllers()
    .ConfigureApiBehaviorOptions(options =>
    {
-      options.SuppressModelStateInvalidFilter = true;
+       options.SuppressModelStateInvalidFilter = true;
    });
 builder.Services.AddDbContext<BlogDataContext>();
 builder.Services.AddTransient<TokenService>();
