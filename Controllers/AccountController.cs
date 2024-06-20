@@ -3,9 +3,9 @@ using Blog.API.Extensions;
 using Blog.API.Models;
 using Blog.API.Services;
 using Blog.API.ViewModels;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using SecureIdentity.Password;
 
 namespace Blog.API.Controllers;
 
@@ -83,5 +83,3 @@ public class AccountController : ControllerBase
       }
    }
 }
-
-// Adicionar: dotnet add package SecureIdentity
