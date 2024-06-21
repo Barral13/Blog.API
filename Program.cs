@@ -1,8 +1,8 @@
 using System.Text;
 using Blog;
 using Blog.API;
-using Blog.Data;
-using Blog.Services;
+using Blog.API.Data;
+using Blog.API.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 
@@ -27,7 +27,7 @@ void LoadConfiguration(WebApplication app)
     Configuration.ApiKey = app.Configuration.GetValue<string>("ApiKey");
 
     var smtp = new Configuration.SmtpConfiguration();
-    app.Configuration.GetSection("Smtp").Bind(smtp);
+    app.Configuration.GetSection("SmtpConfiguration").Bind(smtp);
     Configuration.Smtp = smtp;
 }
 
