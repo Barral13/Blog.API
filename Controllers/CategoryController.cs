@@ -2,6 +2,7 @@ using Blog.API.Data;
 using Blog.API.Extensions;
 using Blog.API.Models;
 using Blog.API.ViewModels;
+using Blog.API.ViewModels.Categories;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
