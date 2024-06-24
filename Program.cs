@@ -1,9 +1,12 @@
+using System.IO.Compression;
 using System.Text;
+using System.Text.Json.Serialization;
 using Blog;
 using Blog.API;
 using Blog.API.Data;
 using Blog.API.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -16,6 +19,7 @@ LoadConfiguration(app);
 
 app.UseAuthentication();
 app.UseAuthorization();
+app.UseResponseCompression();
 app.MapControllers();
 app.UseStaticFiles();
 app.Run();
@@ -27,7 +31,7 @@ void LoadConfiguration(WebApplication app)
     Configuration.ApiKey = app.Configuration.GetValue<string>("ApiKey");
 
     var smtp = new Configuration.SmtpConfiguration();
-    app.Configuration.GetSection("SmtpConfiguration").Bind(smtp);
+    app.Configuration.GetSection("Smtp").Bind(smtp);
     Configuration.Smtp = smtp;
 }
 
@@ -52,10 +56,27 @@ void ConfigureAuthentication(WebApplicationBuilder builder)
 
 void ConfigureMvc(WebApplicationBuilder builder)
 {
+    builder.Services.AddMemoryCache();
+    builder.Services.AddResponseCompression(options =>
+    {
+        options.Providers.Add<GzipCompressionProvider>();
+    });
+    builder.Services.Configure<GzipCompressionProviderOptions>(options =>
+    {
+        options.Level = CompressionLevel.Optimal;
+    });
     builder
         .Services
         .AddControllers()
-        .ConfigureApiBehaviorOptions(options => { options.SuppressModelStateInvalidFilter = true; });
+        .ConfigureApiBehaviorOptions(options =>
+        {
+            options.SuppressModelStateInvalidFilter = true;
+        })
+        .AddJsonOptions(x =>
+        {
+            x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+            x.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingDefault;
+        });
 }
 
 void ConfigureServices(WebApplicationBuilder builder)

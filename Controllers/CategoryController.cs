@@ -5,29 +5,39 @@ using Blog.API.ViewModels;
 using Blog.API.ViewModels.Categories;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace Blog.API.Controllers;
 
 [ApiController]
 public class CategoryController : ControllerBase
 {
-   // Get all categories (READ ALL)
    [HttpGet("v1/categories")]
-   public async Task<IActionResult> GetAsync(
-       [FromServices] BlogDataContext context)
+   public IActionResult GetAsync(
+            [FromServices] IMemoryCache cache,
+            [FromServices] BlogDataContext context)
    {
       try
       {
-         var categories = await context.Categories.ToListAsync();
+         var categories = cache.GetOrCreate("CategoriesCache", entry =>
+         {
+            entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(30);
+            return GetCategories(context);
+         });
+
          return Ok(new ResultViewModel<List<Category>>(categories));
       }
       catch
       {
-         return StatusCode(500, new ResultViewModel<List<Category>>("05XE10 - Falha interna no servidor"));
+         return StatusCode(500, new ResultViewModel<List<Category>>("10X04 - Falha interna no servidor"));
       }
    }
 
-   // Get Category by Id (READ)
+   private List<Category> GetCategories(BlogDataContext context)
+   {
+      return context.Categories.ToList();
+   }
+
    [HttpGet("v1/categories/{id:int}")]
    public async Task<IActionResult> GetByIdAsync(
        [FromRoute] int id,
@@ -50,7 +60,6 @@ public class CategoryController : ControllerBase
       }
    }
 
-   // Post category (CREATE)
    [HttpPost("v1/categories")]
    public async Task<IActionResult> PostAsync(
        [FromBody] EditorCategoryViewModel model,
@@ -83,7 +92,6 @@ public class CategoryController : ControllerBase
       }
    }
 
-   // Put category (UPDADE)
    [HttpPut("v1/categories/{id:int}")]
    public async Task<IActionResult> PutAsync(
        [FromRoute] int id,
@@ -117,7 +125,6 @@ public class CategoryController : ControllerBase
       }
    }
 
-   // Delete category (DELETE)
    [HttpDelete("v1/categories/{id:int}")]
    public async Task<IActionResult> DeleteAsync(
        [FromRoute] int id,
