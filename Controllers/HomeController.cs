@@ -13,7 +13,7 @@ public class HomeController : ControllerBase
         [FromServices] IConfiguration config)
     {
         var env = config.GetValue<string>("Env");
-        return Ok(new 
+        return Ok(new
         {
             Environment = env
         });

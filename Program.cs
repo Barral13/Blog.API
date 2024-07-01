@@ -6,6 +6,7 @@ using Blog.API.Data;
 using Blog.API.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.ResponseCompression;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -26,9 +27,9 @@ app.MapControllers();
 app.UseStaticFiles();
 app.UseResponseCompression();
 
-if(app.Environment.IsDevelopment())
+if (app.Environment.IsDevelopment())
 {
-    Console.WriteLine("⌛Em ambiente de desenvolvimento!⏳");
+    Console.WriteLine("Em ambiente de desenvolvimento!");
     app.UseSwagger();
     app.UseSwaggerUI();
 }
